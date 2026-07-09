@@ -22,9 +22,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage --env=jsdom",
     "build-ci": "next build",
-    "sync-stripe": "node --env-file .env sync-stripe.js",
-    "check-locale": "node check-locale.js",
-    "delete-team": "node --env-file .env delete-team.js"
+"sync-stripe": "node --env-file .env scripts/sync-stripe.js",
+"check-locale": "node scripts/check-locale.js",
+"delete-team": "node --env-file .env scripts/delete-team.js"
   },
   "dependencies": {
     "@boxyhq/metrics": "0.2.12",
