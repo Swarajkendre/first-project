@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BoxyHQ SaaS Starter Kit - Project Documentation</title>
+<style>
+  @page { margin: 20mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1a1a2e;
+    padding: 20px;
+  }
+  h1 { font-size: 22pt; color: #16213e; border-bottom: 3px solid #0f3460; padding-bottom: 8px; margin-bottom: 20px; }
+  h2 { font-size: 16pt; color: #0f3460; margin-top: 24px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+  h3 { font-size: 13pt; color: #1a1a2e; margin-top: 16px; margin-bottom: 8px; }
+  p { margin-bottom: 8px; }
+  ul, ol { margin-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+  code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 9.5pt;
+    background: #f4f4f4;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+  }
+  pre {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-left: 4px solid #0f3460;
+    padding: 10px 14px;
+    margin: 8px 0 12px 0;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 9pt;
+    overflow-x: auto;
+    border-radius: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 10pt;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  th { background: #0f3460; color: white; font-weight: 600; }
+  tr:nth-child(even) { background: #f9f9f9; }
+  .note {
+    background: #fffbe6;
+    border: 1px solid #ffe58f;
+    border-left: 4px solid #faad14;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 4px;
+  }
+  .info {
+    background: #e6f7ff;
+    border: 1px solid #91d5ff;
+    border-left: 4px solid #1890ff;
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 4px;
+  }
+  .cover {
+    text-align: center;
+    padding: 80px 0 60px 0;
+    page-break-after: always;
+  }
+  .cover h1 { font-size: 28pt; border: none; }
+  .cover .subtitle { font-size: 14pt; color: #555; margin-top: 10px; }
+  .cover .meta { margin-top: 40px; color: #777; font-size: 10pt; }
+  .page-break { page-break-before: always; }
+  .schema-box {
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 8px 0 12px 0;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 8.5pt;
+    line-height: 1.4;
+    overflow-x: auto;
+  }
+  hr { border: none; border-top: 1px solid #eee; margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>BoxyHQ SaaS Starter Kit</h1>
+  <div class="subtitle">Project Setup, Database Schema &amp; Push Schema Guide</div>
+  <div class="meta">
+    <p>Version: 1.6.0</p>
+    <p>License: Apache 2.0</p>
+    <p>Generated: July 2026</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h1>1. How to Set Up the Project</h1>
+
+<h2>1.1 Prerequisites</h2>
+<ul>
+  <li><strong>Node.js</strong> v18+</li>
+  <li><strong>npm</strong> v9+</li>
+  <li><strong>Docker Desktop</strong> (for local PostgreSQL)</li>
+  <li><strong>Git</strong></li>
+</ul>
+
+<h2>1.2 Step-by-Step Setup</h2>
+
+<h3>Step 1: Fork &amp; Clone the Repository</h3>
+<pre>git clone https://github.com/&lt;your_username&gt;/saas-starter-kit.git
+cd saas-starter-kit</pre>
+
+<h3>Step 2: Install Dependencies</h3>
+<pre>npm install</pre>
+<p>This installs all project dependencies including Next.js, Prisma, NextAuth.js, Stripe SDK, SAML Jackson, and more.</p>
+
+<h3>Step 3: Configure Environment Variables</h3>
+<pre>cp .env.example .env</pre>
+<p>Then edit the <code>.env</code> file. Key variables you <strong>must</strong> configure:</p>
+
+<table>
+  <tr><th>Variable</th><th>Description</th><th>Default</th></tr>
+  <tr><td><code>DATABASE_URL</code></td><td>PostgreSQL connection string</td><td><code>postgresql://postgres:postgres@localhost:5432/saas-starter-kit</code></td></tr>
+  <tr><td><code>NEXTAUTH_SECRET</code></td><td>Encryption secret for NextAuth.js</td><td>(generate one)</td></tr>
+  <tr><td><code>NEXTAUTH_URL</code></td><td>Application URL</td><td><code>http://localhost:4002</code></td></tr>
+  <tr><td><code>APP_URL</code></td><td>Same as NEXTAUTH_URL</td><td><code>http://localhost:4002</code></td></tr>
+  <tr><td><code>SMTP_HOST</code>, <code>SMTP_PORT</code>, etc.</td><td>Email configuration for magic links &amp; invitations</td><td>—</td></tr>
+</table>
+
+<div class="note">
+<strong>Note:</strong> Some features (Stripe, Svix, SAML SSO) require additional API keys. The app will work for core functionality without them, but those features will be disabled.
+</div>
+
+<h3>Step 4: Start PostgreSQL (Docker)</h3>
+<pre>docker-compose up -d</pre>
+<p>This starts a PostgreSQL 16.4 container on port 5432 with the following defaults:</p>
+<ul>
+  <li><strong>Database:</strong> <code>saas-starter-kit</code></li>
+  <li><strong>User:</strong> <code>postgres</code></li>
+  <li><strong>Password:</strong> <code>postgres</code></li>
+</ul>
+
+<h3>Step 5: Push the Database Schema</h3>
+<pre>npx prisma db push</pre>
+<p>This synchronizes the Prisma schema from <code>prisma/schema.prisma</code> to your PostgreSQL database, creating all tables, indexes, and enums.</p>
+
+<div class="info">
+<strong>What does this do?</strong> See Chapter 3 for a full explanation of "push schema."
+</div>
+
+<h3>Step 6: (Optional) Seed the Database</h3>
+<pre>npx prisma db seed</pre>
+<p>Populates the database with sample data: 10 users, 5 teams, team memberships, and invitations.</p>
+
+<h3>Step 7: Start the Development Server</h3>
+<pre>npm run dev</pre>
+<p>The app will be available at <strong>http://localhost:4002</strong>.</p>
+
+<h3>Step 8: (Optional) Open Prisma Studio</h3>
+<pre>npx prisma studio</pre>
+<p>Opens a visual database browser at <strong>http://localhost:5555</strong>.</p>
+
+<h2>1.3 Available npm Scripts</h2>
+<table>
+  <tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>npm run dev</code></td><td>Start development server (port 4002)</td></tr>
+  <tr><td><code>npm run build</code></td><td>Build for production (<code>prisma generate</code> + <code>prisma db push</code> + <code>next build</code>)</td></tr>
+  <tr><td><code>npm start</code></td><td>Start production server (port 4002)</td></tr>
+  <tr><td><code>npm test</code></td><td>Run Jest unit tests</td></tr>
+  <tr><td><code>npm run test:e2e</code></td><td>Run Playwright end-to-end tests</td></tr>
+  <tr><td><code>npm run sync-stripe</code></td><td>Sync Stripe products &amp; prices</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<div class="page-break"></div>
+<h1>2. Database Schema</h1>
+
+<h2>2.1 Overview</h2>
+<p>The project uses <strong>Prisma ORM</strong> with <strong>PostgreSQL</strong>. The schema is defined in <code>prisma/schema.prisma</code> and contains <strong>12 models</strong>:</p>
+<ul>
+  <li>8 application models (User, Team, TeamMember, Invitation, Account, Session, VerificationToken, PasswordReset, ApiKey, Subscription, Service, Price)</li>
+  <li>3 Jackson internal models (jackson_store, jackson_index, jackson_ttl) — marked with <code>@@ignore</code></li>
+</ul>
+
+<h2>2.2 Entity-Relationship Diagram (Textual)</h2>
+<pre>
+  ┌──────────┐       ┌────────────┐       ┌──────────┐
+  │   User   │──1:N──│ TeamMember │──N:1──│   Team   │
+  └──────────┘       └────────────┘       └──────────┘
+       │                                        │
+       │ 1:N                                    │ 1:N
+       ▼                                        ▼
+  ┌──────────┐                            ┌──────────┐
+  │  Account │                            │ ApiKey   │
+  ├──────────┤                            ├──────────┤
+  │  Session │                            │Invitation│
+  ├──────────┤                            └──────────┘
+  │  VerificationToken │
+  ├──────────┤
+  │PasswordReset│
+  └──────────┘
+
+  ┌────────────┐       ┌──────────┐       ┌──────────┐
+  │Subscription│──N:1──│ Service  │──1:N──│   Price  │
+  └────────────┘       └──────────┘       └──────────┘
+       │
+       │ M:1 (via billingId)
+       ▼
+  ┌──────────┐
+  │   Team   │
+  └──────────┘
+</pre>
+
+<h2>2.3 Model Details</h2>
+
+<h3>Enum: Role</h3>
+<div class="schema-box">
+enum Role { ADMIN, OWNER, MEMBER }
+</div>
+
+<h3>User</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Constraints</th></tr>
+  <tr><td>id</td><td>String (UUID)</td><td>Primary key, auto-generated</td></tr>
+  <tr><td>name</td><td>String</td><td>Required</td></tr>
+  <tr><td>email</td><td>String</td><td>Unique, required</td></tr>
+  <tr><td>emailVerified</td><td>DateTime?</td><td>Nullable</td></tr>
+  <tr><td>password</td><td>String?</td><td>Nullable (null for social login users)</td></tr>
+  <tr><td>image</td><td>String?</td><td>Nullable (avatar URL)</td></tr>
+  <tr><td>invalid_login_attempts</td><td>Int</td><td>Default: 0</td></tr>
+  <tr><td>lockedAt</td><td>DateTime?</td><td>Nullable</td></tr>
+  <tr><td>createdAt</td><td>DateTime</td><td>Default: now()</td></tr>
+  <tr><td>updatedAt</td><td>DateTime</td><td>Auto-updated</td></tr>
+</table>
+<p><strong>Relations:</strong> Has many TeamMembers, Accounts, Sessions, and Invitations.</p>
+
+<h3>Account (NextAuth.js adapter)</h3>
+<p>Stores OAuth/SAML provider account links to a User. Key fields: <code>provider</code>, <code>providerAccountId</code>, <code>access_token</code>, <code>refresh_token</code>, etc.</p>
+
+<h3>Session (NextAuth.js adapter)</h3>
+<p>Stores active user sessions. Linked to a User via <code>userId</code>.</p>
+
+<h3>VerificationToken (NextAuth.js adapter)</h3>
+<p>Stores magic link verification tokens. Fields: <code>identifier</code>, <code>token</code>, <code>expires</code>.</p>
+
+<h3>Team</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Constraints</th></tr>
+  <tr><td>id</td><td>String (UUID)</td><td>Primary key</td></tr>
+  <tr><td>name</td><td>String</td><td>Required</td></tr>
+  <tr><td>slug</td><td>String</td><td>Unique, URL-friendly</td></tr>
+  <tr><td>domain</td><td>String?</td><td>Unique, nullable (verified domain)</td></tr>
+  <tr><td>defaultRole</td><td>Role</td><td>Default: MEMBER</td></tr>
+  <tr><td>billingId / billingProvider</td><td>String?</td><td>Stripe billing info</td></tr>
+</table>
+<p><strong>Relations:</strong> Has many TeamMembers (users), Invitations, and ApiKeys.</p>
+
+<h3>TeamMember</h3>
+<p>Junction table between User and Team. Unique constraint on <code>(teamId, userId)</code>. Each member has a <code>Role</code>.</p>
+
+<h3>Invitation</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td>token</td><td>String</td><td>Unique invite token</td></tr>
+  <tr><td>email</td><td>String</td><td>Invited email</td></tr>
+  <tr><td>expires</td><td>DateTime</td><td>Expiry timestamp</td></tr>
+  <tr><td>invitedBy</td><td>String</td><td>References User</td></tr>
+  <tr><td>sentViaEmail</td><td>Boolean</td><td>Default: true</td></tr>
+  <tr><td>allowedDomains</td><td>String[]</td><td>Domain allow-list</td></tr>
+</table>
+<p>Unique constraint on <code>(teamId, email)</code>.</p>
+
+<h3>PasswordReset</h3>
+<p>Stores password reset tokens. Uses auto-increment integer primary key.</p>
+
+<h3>ApiKey</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td>hashedKey</td><td>String</td><td>Unique, hashed API key</td></tr>
+  <tr><td>teamId</td><td>String</td><td>Foreign key to Team</td></tr>
+  <tr><td>expiresAt</td><td>DateTime?</td><td>Nullable</td></tr>
+  <tr><td>lastUsedAt</td><td>DateTime?</td><td>Nullable</td></tr>
+</table>
+
+<h3>Subscription</h3>
+<p>Stores Stripe subscription data. Fields: <code>customerId</code>, <code>priceId</code>, <code>active</code>, <code>startDate</code>, <code>endDate</code>.</p>
+
+<h3>Service &amp; Price</h3>
+<p>Billing catalog: <strong>Service</strong> has many <strong>Prices</strong>. Used for Stripe product/price sync.</p>
+
+<h2>2.4 Migrations</h2>
+<p>The project includes <strong>11 migration files</strong> in <code>prisma/migrations/</code>:</p>
+<table>
+  <tr><th>Migration</th><th>Date</th><th>Changes</th></tr>
+  <tr><td><code>20230625203909_init</code></td><td>Jun 2023</td><td>Initial schema (User, Team, TeamMember, Account, Session, etc.)</td></tr>
+  <tr><td><code>20230703084002_add_api_keys</code></td><td>Jul 2023</td><td>Added ApiKey model</td></tr>
+  <tr><td><code>20230703084117_add_index_user</code></td><td>Jul 2023</td><td>Index on User</td></tr>
+  <tr><td><code>20230720113226_make_password_optional</code></td><td>Jul 2023</td><td>Made password nullable</td></tr>
+  <tr><td><code>20231109082527_add_account_lockout</code></td><td>Nov 2023</td><td>Added account lockout fields</td></tr>
+  <tr><td><code>20240109041326_columns_for_invitation_link</code></td><td>Jan 2024</td><td>Added sentViaEmail, allowedDomains</td></tr>
+  <tr><td><code>20240212105842_stripe</code></td><td>Feb 2024</td><td>Subscription, Service, Price models</td></tr>
+  <tr><td><code>20240213160517_indices</code></td><td>Feb 2024</td><td>Various indexes</td></tr>
+  <tr><td><code>20240226091046_add_jackson_schema</code></td><td>Feb 2024</td><td>Jackson internal models</td></tr>
+  <tr><td><code>20240316224800_add_index_billing_id</code></td><td>Mar 2024</td><td>Index on Team.billingId</td></tr>
+  <tr><td><code>20240531124127_expand_jackson_namespace_column</code></td><td>May 2024</td><td>Expanded namespace column</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<div class="page-break"></div>
+<h1>3. What Is "Push Schema" and Why Is It Needed?</h1>
+
+<h2>3.1 Definition</h2>
+<p><strong>"Push schema"</strong> refers to the Prisma CLI command:</p>
+<pre>npx prisma db push</pre>
+<p>This command synchronizes your Prisma schema (<code>prisma/schema.prisma</code>) directly to your database — creating, altering, or deleting tables, columns, indexes, and enums to match the schema definition.</p>
+
+<h2>3.2 How It Works</h2>
+<ol>
+  <li><strong>Reads</strong> the <code>schema.prisma</code> file (the source of truth for your database structure)</li>
+  <li><strong>Connects</strong> to the database using <code>DATABASE_URL</code> from <code>.env</code></li>
+  <li><strong>Compares</strong> the schema against the current database state</li>
+  <li><strong>Generates</strong> and executes SQL statements to make the database match the schema</li>
+  <li><strong>Reports</strong> any warnings (e.g., data loss if a column is removed)</li>
+</ol>
+
+<h2>3.3 Why Is It Needed?</h2>
+
+<h3>1. First-Time Database Setup</h3>
+<p>After cloning the project and starting PostgreSQL, the database is empty. Running <code>prisma db push</code> creates all the tables, columns, indexes, and enums defined in the schema so the application can function.</p>
+<p><strong>Without this step:</strong> The app would crash with "relation does not exist" errors when trying to query users, teams, etc.</p>
+
+<h3>2. Schema Changes During Development</h3>
+<p>When you modify <code>schema.prisma</code> (add a field, change a type, add a model), <code>prisma db push</code> applies those changes immediately without creating migration files. This is ideal for rapid prototyping.</p>
+
+<h3>3. Keeping Prisma Client Updated</h3>
+<p>After pushing schema changes, you also need to regenerate the Prisma Client:</p>
+<pre>npx prisma generate</pre>
+<p>This updates the TypeScript client library with type-safe methods for the new/changed models.</p>
+
+<h2>3.4 Push Schema vs. Migrations</h2>
+<table>
+  <tr><th>Aspect</th><th><code>prisma db push</code></th><th><code>prisma migrate</code></th></tr>
+  <tr><td>Purpose</td><td>Quick sync for development</td><td>Version-controlled schema changes</td></tr>
+  <tr><td>Migration files</td><td>Does NOT create any</td><td>Creates SQL migration files</td></tr>
+  <tr><td>Version history</td><td>No history</td><td>Full change history</td></tr>
+  <tr><td>Rollback</td><td>Not supported</td><td>Supported via migration files</td></tr>
+  <tr><td>Data loss warnings</td><td>Interactive prompts</td><td>Checked during generation</td></tr>
+  <tr><td>Production use</td><td>Not recommended</td><td>Recommended (<code>migrate deploy</code>)</td></tr>
+  <tr><td>Speed</td><td>Fast (no file generation)</td><td>Slower (generates files)</td></tr>
+  <tr><td>Team collaboration</td><td>Harder (no file to commit)</td><td>Easier (files in version control)</td></tr>
+</table>
+
+<div class="info">
+<strong>In this project:</strong> The <code>package.json</code> <code>build</code> script runs <code>prisma db push</code> automatically: <code>prisma generate && prisma db push && next build</code>. This ensures the database schema is always up-to-date before building.
+</div>
+
+<h2>3.5 When to Use Each</h2>
+<ul>
+  <li><strong>Use <code>prisma db push</code>:</strong> During initial development, prototyping, or when you're the only developer working on the database schema.</li>
+  <li><strong>Use <code>prisma migrate dev</code>:</strong> When you want to create a formal migration file to commit to version control, especially in a team setting.</li>
+  <li><strong>Use <code>prisma migrate deploy</code>:</strong> In production/staging environments to apply migrations safely.</li>
+</ul>
+
+<h2>3.6 Common Commands Cheat Sheet</h2>
+<table>
+  <tr><th>Command</th><th>What It Does</th></tr>
+  <tr><td><code>npx prisma db push</code></td><td>Push schema to DB (no migration files)</td></tr>
+  <tr><td><code>npx prisma generate</code></td><td>Regenerate Prisma Client (TypeScript)</td></tr>
+  <tr><td><code>npx prisma studio</code></td><td>Open visual database browser</td></tr>
+  <tr><td><code>npx prisma migrate dev</code></td><td>Create and apply a new migration</td></tr>
+  <tr><td><code>npx prisma migrate deploy</code></td><td>Apply pending migrations (production)</td></tr>
+  <tr><td><code>npx prisma db seed</code></td><td>Seed database with sample data</td></tr>
+  <tr><td><code>npx prisma db pull</code></td><td>Introspect DB and generate schema</td></tr>
+</table>
+
+<hr>
+
+<h2>3.7 Summary</h2>
+<p><strong>Push schema (<code>prisma db push</code>) is needed because:</strong></p>
+<ol>
+  <li>The database starts empty — tables must be created for the app to work.</li>
+  <li>It provides a fast, iterative workflow during development.</li>
+  <li>It keeps the database in sync with the Prisma schema as you make changes.</li>
+  <li>It's integrated into the build pipeline (see <code>package.json</code>: <code>"build": "prisma generate && prisma db push && next build"</code>).</li>
+</ol>
+
+<div class="note">
+<strong>Pro Tip:</strong> For team projects, consider switching to <code>prisma migrate dev</code> to generate migration files that can be reviewed in pull requests and applied consistently across environments.
+</div>
+
+<hr>
+<p style="text-align:center;color:#888;font-size:10pt;margin-top:20px;">
+  BoxyHQ SaaS Starter Kit v1.6.0 — Documentation generated July 2026
+</p>
+
+</body>
+</html>
